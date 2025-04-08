@@ -1,5 +1,3 @@
-import sys
-
 import matplotlib.pyplot as plt
 from noise import pnoise2
 import numpy as np
