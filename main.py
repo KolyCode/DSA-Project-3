@@ -2,7 +2,8 @@
 from map_creation import *
 
 def main():
-    create_height_map()
+    while True:
+        create_height_map()
 
 #calls the main function
 if __name__ == '__main__':
