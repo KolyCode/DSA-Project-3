@@ -10,54 +10,6 @@ heightmap = None
 #this is the node map:
 nodemap = None
 
-#creates heightmap, which is an array of integers representing the heights
-def create_height_map(x_length=400, y_length=400):
-    global heightmap
-
-    array = (x_length, y_length)
-
-    #DO NOT CHANGE THESE PRESET VALUES. I HAVE THEM THIS WAY FOR A REASON!
-    seed = random.randint(-2048, 2047) #chooses the seed for the perlin noise generation
-    scale = random.randint(50,200) #smaller = more zoomed in. gives a random level of zoom
-    num_octaves = random.randint(1,126); #random level of detail, more octaves = more detail & less height variation
-    print(seed, scale, num_octaves)
-
-    heightmap = np.zeros(array)
-
-    for i in range(array[0]):
-        for j in range(array[1]):
-            heightmap[i][j] = pnoise2(i / scale, j / scale, octaves=num_octaves, base=seed)
-
-    # Normalize to 0–255
-    heightmap = ((heightmap - heightmap.min()) / (heightmap.max() - heightmap.min())) * 255
-    heightmap = np.nan_to_num(heightmap, nan=0, posinf=0, neginf=0) #take away goofy numbers
-    heightmap = heightmap.astype(int)
-
-    create_node_map()
-
-    #creates the map which is displayed
-    plt.imshow(heightmap, cmap='terrain')
-    plt.colorbar(label='Elevation (m)')
-    plt.title("Perlin Noise Terrain")
-    plt.show()
-
-    return heightmap
-
-#creates the node_map, which is an array of nodes
-def create_node_map():
-    nodemap = [[None for _ in range(len(heightmap[0]))] for _ in range(len(heightmap))]
-    #this for loop initializes the node array
-    for x in range(0, len(heightmap)):
-        for y in range(0, len(heightmap[x])):
-            nodemap[x][y] = Node(x, y, heightmap[x][y])
-
-    #this for loop calls the neighbor calculations for each node
-    for x in range(len(nodemap)):
-        for y in range(len(nodemap[x])):
-            nodemap[x][y].find_distance_to_neighbors()
-
-    #it also edits the nodemap, so u don't have to take the return here if you don't want to
-    return nodemap
 
 #START NODE CLASS
 #START NODE CLASS
@@ -173,3 +125,64 @@ def calculate_weight_diagonal(start, end):
 #END NODE CLASS
 #END NODE CLASS
 #END NODE CLASS
+
+
+#creates both the height and node maps:
+def create_maps(size_x=400, size_y=400):
+    create_height_map(size_x, size_y)
+    create_node_map()
+    display_height_map() #comment this out if you want to stop generating the terrain images
+
+#creates heightmap, which is an array of integers representing the heights
+def create_height_map(x_length=400, y_length=400):
+    global heightmap
+
+    array = (x_length, y_length)
+
+    #DO NOT CHANGE THESE PRESET VALUES. I HAVE THEM THIS WAY FOR A REASON!
+    seed = random.randint(-2048, 2047) #chooses the seed for the perlin noise generation
+    scale = random.randint(50,200) #smaller = more zoomed in. gives a random level of zoom
+    num_octaves = random.randint(1,126); #random level of detail, more octaves = more detail & less height variation
+    print(seed, scale, num_octaves)
+
+    heightmap = np.zeros(array)
+
+    for i in range(array[0]):
+        for j in range(array[1]):
+            heightmap[i][j] = pnoise2(i / scale, j / scale, octaves=num_octaves, base=seed)
+
+    # Normalize to 0–255
+    heightmap = ((heightmap - heightmap.min()) / (heightmap.max() - heightmap.min())) * 255
+    heightmap = np.nan_to_num(heightmap, nan=0, posinf=0, neginf=0) #take away goofy numbers
+    heightmap = heightmap.astype(int)
+
+    return heightmap
+
+def display_height_map():
+    #creates the map which is displayed
+    plt.imshow(heightmap, cmap='terrain')
+    plt.colorbar(label='Elevation (ft)')
+    plt.title("Perlin Noise Terrain")
+    plt.gca().invert_yaxis()
+    plt.show()
+
+#creates the node_map, which is an array of nodes
+def create_node_map():
+    nodemap = [[None for _ in range(len(heightmap[0]))] for _ in range(len(heightmap))]
+    #this for loop initializes the node array
+    for x in range(0, len(heightmap)):
+        for y in range(0, len(heightmap[x])):
+            nodemap[x][y] = Node(x, y, heightmap[x][y])
+
+    #this for loop calls the neighbor calculations for each node
+    for x in range(len(nodemap)):
+        for y in range(len(nodemap[x])):
+            nodemap[x][y].find_distance_to_neighbors()
+
+    #it also edits the nodemap, so u don't have to take the return here if you don't want to
+    return nodemap
+
+
+
+
+
