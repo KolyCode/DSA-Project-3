@@ -98,9 +98,7 @@ class Node:
 
 #helper function to determine whether or not a node exists
 def does_node_exist(x, y):
-    if(x >= 0 and x < len(heightmap) and y >= 0 and y < len(heightmap[0])):
-        return True
-    return False
+    return 0 <= x < len(heightmap) and 0 <= y < len(heightmap[0])
 
 def calculate_weight(start, end, distance=1.0):
     delta_height = end - start.height
