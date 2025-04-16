@@ -44,5 +44,6 @@ def dijkstra(graph, start, end): #graph is a nodemap list
                 if alt < dists[v]:
                     dists[v] = alt
                     prev[v] = u
+                    u.is_path = True
     return None # only gets here if theres no path
 
