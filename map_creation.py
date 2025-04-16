@@ -180,6 +180,21 @@ def create_node_map():
     #it also edits the nodemap, so u don't have to take the return here if you don't want to
     return nodemap
 
+#returns the neighbors of the given node
+def get_neighbors(u):
+    if nodemap is None:
+        return None
+
+    up = nodemap[u.posx][u.posy + 1]
+    up_right = nodemap[u.posx + 1][u.posy + 1]
+    right = nodemap[u.posx + 1][u.posy]
+    down = nodemap[u.posx][u.posy - 1]
+    down_left = nodemap[u.posx - 1][u.posy - 1]
+    left = nodemap[u.posx - 1][u.posy]
+    up_left = nodemap[u.posx - 1][u.posy + 1]
+    down_right = nodemap[u.posx + 1][u.posy - 1]
+
+    return [(up, u.weight_up), (up_right, u.weight_upright), (right, u.weight_right), (down, u.weight_down), (down_left, u.weight_downleft), (left, u.weight_left), (up_left, u.weight_upleft), (down_right, u.weight_downright)]
 
 
 
