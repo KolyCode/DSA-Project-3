@@ -1,26 +1,8 @@
-"""
-function Dijkstra(Graph, source):
-    for each vertex v in Graph.Vertices:
-        dist[v] ← INFINITY
-        prev[v] ← UNDEFINED
-        add v to Q
-    dist[source] ← 0
+import heapq, math
 
-    while Q is not empty:
-        u ← vertex in Q with minimum dist[u]
-        remove u from Q
-
-        for each neighbor v of u still in Q:
-            alt ← dist[u] + Graph.Edges(u, v)
-            if alt < dist[v]:
-                dist[v] ← alt
-                prev[v] ← u
-    return dist[], prev[]
-"""
-import heapq
 from map_creation import *
 
-def dijkstra(graph, start, end): #graph is a nodemap list
+def dijkstra(graph, start): #graph is a nodemap list
     dists = {}
     prev = {}
     nodes = []
@@ -35,9 +17,6 @@ def dijkstra(graph, start, end): #graph is a nodemap list
 
     while nodes:
         dist, u = heapq.heappop(nodes) #pop the distance into dist and node into u
-
-        if u == end:
-            return dist, prev
         neigh = get_neighbors(u)
         for v, d in neigh:
             if v in nodes:
@@ -46,68 +25,56 @@ def dijkstra(graph, start, end): #graph is a nodemap list
                     dists[v] = alt
                     prev[v] = u
                     u.is_path = True
-    return None # only gets here if theres no path
 
-"""
-function BellmanFord(list vertices, list edges, vertex source) is
+    return dists, prev # use get_path with this to find the best overall path to wherever
 
-    // This implementation takes in a graph, represented as
-    // lists of vertices (represented as integers [0..n-1]) and edges,
-    // and fills two arrays (distance and predecessor) holding
-    // the shortest path from the source to each vertex
+def get_path(prev, cur):
+    path = [cur]
+    while cur in prev:
+        cur = prev[cur]
+        path.insert(0, cur)
+    return path
 
-    distance := list of size n
-    predecessor := list of size n
-
-    // Step 1: initialize graph
-    for each vertex v in vertices do
-        // Initialize the distance to all vertices to infinity
-        distance[v] := inf
-        // And having a null predecessor
-        predecessor[v] := null
-    
-    // The distance from the source to itself is zero
-    distance[source] := 0
-
-    // Step 2: relax edges repeatedly
-    repeat |V|−1 times:
-        for each edge (u, v) with weight w in edges do
-            if distance[u] + w < distance[v] then
-                distance[v] := distance[u] + w
-                predecessor[v] := u
+#heuristic function, estimates the distance by using a straight line function
+def heuristic(start, end):
+    return math.sqrt((start.posx - end.posx) ** 2 + (start.posy - end.posy) ** 2)
 
 
-        NOT USING THIS PART, DONT HAVE NEGATIVE WEIGHT CYCLES
-    // Step 3: check for negative-weight cycles
-    for each edge (u, v) with weight w in edges do
-        if distance[u] + w < distance[v] then
-            predecessor[v] := u
-            // A negative cycle exists; find a vertex on the cycle 
-            visited := list of size n initialized with false
-            visited[v] := true
-            while not visited[u] do
-                visited[u] := true
-                u := predecessor[u]
-            // u is a vertex in a negative cycle, find the cycle itself
-            ncycle := [u]
-            v := predecessor[u]
-            while v != u do
-                ncycle := concatenate([v], ncycle)
-                v := predecessor[v]
-            error "Graph contains a negative-weight cycle", ncycle
-    return distance, predecessor
-"""
+def a_star(start, end, graph):
+    open_set = []
+    heapq.heappush(open_set, (0, start))
+    prev = {}
+
+    #g_score[n] is the currently known least cost to n
+    g_score = {start: 0}
+
+    #f_score[n] is g_score[n] + h(n), represents our current best guess of
+    # how cheap a path start to end is going through n
+    f_score = {start: heuristic(start, end)}
+
+    while open_set:
+        _, current = heapq.heappop(open_set) #don't need the first part of this, its just for sorting
+
+        if current == end:
+            return get_path(prev, current)
+
+        for d, n in get_neighbors(current):
+            tentative_g_score = g_score[current] + d
+            if tentative_g_score < g_score[n]:
+                prev[n] = current
+                g_score[n] = tentative_g_score
+                f_score[n] = tentative_g_score + heuristic(n, end)
+                if n not in open_set:
+                    heapq.heappush(open_set, (f_score[n], n))
+
+    # open_set is empty but the goal wasn't reached, i.e. no path
+    return None
 
 
-def bellman(graph, start):
-    dists = []
-    prev = []
-    for r in graph:
-        for v in r:
-            dists[v] = float('inf')
-            prev[v] = None
 
-    dists[start] = 0
+
+
+
 
 
 
