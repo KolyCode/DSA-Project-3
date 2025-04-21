@@ -38,7 +38,6 @@ async def terrain_generator(xlim: int = Form(100), ylim: int = Form(100)):
     heightmap_fig = plotTerrain(as_3d=True)
     heightmap_fig = json.dumps(heightmap_fig, cls=PlotlyJSONEncoder)
     return JSONResponse(content=heightmap_fig)
-    
 
 @app.post("/start-end-setter")
 async def start_end_setter():
@@ -49,7 +48,6 @@ async def start_end_setter():
     ##marked_fig.add_trace()##
     #marked_fig = json.dumps(marked_fig, cls=PlotlyJSONEncoder)
     #return JSONResponse(content=marked_fig)
-
 
 @app.post("/reset-button")
 async def reset_button():

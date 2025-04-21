@@ -4,9 +4,12 @@
             <meta charset="UTF-16">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-            <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
+            <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
             <title>Path-Finding Web App</title>  
             <style>
+                 header {
+                    padding-left: 5%;
+                 }
                  body {
                    background-color: #F5F5F5; /*alt: #F8F8FF #FAFAFA steel #404454 #101218*/
                    font-family: 'Inter', sans-serif;
@@ -18,7 +21,7 @@
                    display: flex;
                    justify-content: center;
                    align-items: center;
-                   overflow: hidden;
+                   overflow: scroll;
                  }
                  .terrain-generator {
                    
@@ -31,11 +34,15 @@
                    cursor: pointer;
                    border-radius: 5px;
                  }
-                 .plot-options {
-                   
+                 .bottom-bar {
+                   flex: 1;
+                   display: flex;
+                   justify-content: space-between;
+                   align-items: center;
+                   padding: 1% 4%;
                  }
                  .start-end-setter {
-                   
+                    
                  }
                  .plot-button {
                    width: 50px;
@@ -95,6 +102,12 @@
             <main>
               <div id="plot"></div>
               <script>
+                // blank placeholder plot displayed on page open
+                Plotly.newPlot(
+                    'plot', 
+                    [{type: "surface", z: [ [0,0,0],[0,0,0],[0,0,0] ]}], 
+                    {title: "Blank 3D Placeholder Plot"}
+                );
                 // show plot
                 async function showPlot(actionURL, formData = null) {
                   const response = await fetch(actionURL, {method: formData ? "POST" : "GET", body: formData});
@@ -132,42 +145,44 @@
             </main>
             
             <!-- User Input -->
-            <form id="terrain-generator" method="post" action="/terrain-generator">
-              <label for="x_dim">X Dimension</label>
-              <input type="text" id="x_dim" name="x_dim" value="100" min="0" max="1000" required />
-              <label for="y_dim">Y Dimension</label>
-              <input type="text" id="y_dim" name="y_dim" value="100" min="0" max="1000" required />
-              <button class="generate-button" type="submit">Generate Map</button> <!-- large square button to reveal next form -->
-            </form>
-            <div class="plot-options">
-              <form id="start-end-setter" method="post" action="/start-end-setter">
-                <label>Start</label>
-                <div>
-                  <label for="start_x">X</label>
-                  <input type="text" id="start_x" name="start_x" min="0" max="1000" required />
-                  <label for="start_y">Y</label>
-                  <input type="text" id="start_y" name="start_y" min="0" max="1000" required />
+            <div class="bottom-bar">
+                <form id="terrain-generator" method="post" action="/terrain-generator">
+                <label for="x_dim">X Dimension</label>
+                <input type="text" id="x_dim" name="x_dim" value="100" min="0" max="1000" required />
+                <label for="y_dim">Y Dimension</label>
+                <input type="text" id="y_dim" name="y_dim" value="100" min="0" max="1000" required />
+                <button class="generate-button" type="submit">Generate Map</button> <!-- large square button to reveal next form -->
+                </form>
+                <div class="plot-options">
+                <form id="start-end-setter" method="post" action="/start-end-setter">
+                    <label>Start</label>
+                    <div>
+                    <label for="start_x">X</label>
+                    <input type="text" id="start_x" name="start_x" min="0" max="1000" required />
+                    <label for="start_y">Y</label>
+                    <input type="text" id="start_y" name="start_y" min="0" max="1000" required />
+                    </div>
+                    <label>Endpoint</label>
+                    <div>
+                    <label for="end_x">X</label>
+                    <input type="text" id="end_x" name="end_x" min="0" max="1000" required />
+                    <label for="end_y">Y</label>
+                    <input type="text" id="end_y" name="end_y" min="0" max="1000" required />
+                    </div>
+                    <button class="plot-button" type="submit">Plot Paths</button> <!-- large square plot button -->
+                </form>
+                <div class="switch-container">
+                    <label class="switch">
+                    <input type="checkbox" id="plotDimensionToggle" />
+                    <span class="slider">
+                        <div class="3D-icon">⛰️</div>
+                        <div class="2D-icon">🗺️ </div> 
+                    </span>
+                    </label>
                 </div>
-                <label>Endpoint</label>
-                <div>
-                  <label for="end_x">X</label>
-                  <input type="text" id="end_x" name="end_x" min="0" max="1000" required />
-                  <label for="end_y">Y</label>
-                  <input type="text" id="end_y" name="end_y" min="0" max="1000" required />
                 </div>
-                <button class="plot-button" type="submit">Plot Paths</button> <!-- large square plot button -->
-              </form>
-              <div class="switch-container">
-                <label class="switch">
-                  <input type="checkbox" id="plotDimensionToggle" />
-                  <span class="slider">
-                    <div class="3D-icon">⛰️</div>
-                    <div class="2D-icon">🗺️ </div> 
-                  </span>
-                </label>
-              </div>
+                <button class="reset-button">Reset</button> <!-- big red button -->
             </div>
-            <button class="reset-button">Reset</button> <!-- big red button -->
             
             <footer>
               <div class="left-foot">Designed for COP3530 at the University of Florida 🐊</div>

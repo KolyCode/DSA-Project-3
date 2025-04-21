@@ -16,12 +16,12 @@ def plotTerrain(as_3d=False):
 
     path1_x, path1_y, path1_z = [], [], []
     if dijk_path != None:
-        for n in dijk_path: 
-            path1_x[n], path1_y[n], path1_z[n] = n.posx, n.posy, n.height
+        for n in range(len(dijk_path)): 
+            path1_x[n], path1_y[n], path1_z[n] = dijk_path[n].posx, dijk_path[n].posy, dijk_path[n].height
     path2_x, path2_y, path2_z = [], [], []
     if a_star_path != None:
-        for n in a_star_path:
-            path2_x[n], path2_y[n], path2_z[n] = n.posx, n.posy, n.height
+        for n in range(len(a_star_path)):
+            path2_x[n], path2_y[n], path2_z[n] = a_star_path[n].posx, a_star_path[n].posy, a_star_path[n].height
 
     #print(f"heightmap size : {heightmap.shape}")
     print(f"dijkstra path length : {len(path1_z)}\t a_star path length : {len(path2_z)}\t as_3d : {as_3d}")
