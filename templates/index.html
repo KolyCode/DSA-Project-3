@@ -10,6 +10,8 @@
                  body {
                    background-color: #F5F5F5; /*alt: #F8F8FF #FAFAFA steel #404454 #101218*/
                    font-family: 'Inter', sans-serif;
+                   height: 100%;
+                   margin: 0;
                  }
                  .main { /* */
                    flex: 1;
@@ -101,7 +103,7 @@
                 }
                 // update plot with heightmap
                 document.getElementById("terrain-generator").addEventListener("submit", function(event) {
-                  event.preventDefault();
+                  //event.preventDefault();
                   const data = new FormData(this);
                   showPlot("/generate-terrain", data); // references quoted main.py function
                 });
@@ -130,7 +132,7 @@
             </main>
             
             <!-- User Input -->
-            <form id="terrain-generator" method="post" action="/set-dims">
+            <form id="terrain-generator" method="post" action="/terrain-generator">
               <label for="x_dim">X Dimension</label>
               <input type="text" id="x_dim" name="x_dim" value="100" min="0" max="1000" required />
               <label for="y_dim">Y Dimension</label>
@@ -138,7 +140,7 @@
               <button class="generate-button" type="submit">Generate Map</button> <!-- large square button to reveal next form -->
             </form>
             <div class="plot-options">
-              <form id="start-end-setter" method="post" action="/set-points">
+              <form id="start-end-setter" method="post" action="/start-end-setter">
                 <label>Start</label>
                 <div>
                   <label for="start_x">X</label>
