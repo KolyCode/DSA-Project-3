@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-16">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+            <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+            <title>Path-Finding Web App</title>  
+            <style>
+                 body {
+                   background-color: #F5F5F5; /*alt: #F8F8FF #FAFAFA steel #404454 #101218*/
+                   font-family: 'Inter', sans-serif;
+                 }
+                 .main { /* */
+                   flex: 1;
+                   display: flex;
+                   justify-content: center;
+                   align-items: center;
+                   overflow: hidden;
+                 }
+                 .terrain-generator {
+                   
+                 }
+                 .generate-button {
+                   width: 80px;
+                   height: 50px;
+                   background-color: #2ecc71;
+                   color: white;
+                   cursor: pointer;
+                   border-radius: 5px;
+                 }
+                 .plot-options {
+                   
+                 }
+                 .start-end-setter {
+                   
+                 }
+                 .plot-button {
+                   width: 50px;
+                   height: 50px;
+                   background-color: #5063f0;
+                   color: white;
+                   cursor: pointer;
+                   border-radius: 5px;
+                   
+                 }
+                 .switch-container {
+                   /*display: none;*/
+                 }
+                 .switch {
+                   /*width: 50;height: 50;position: relative;*/
+                   display: inline-block;
+                 }
+                 .switch input {
+                   display: none;
+                   /*opacity: 0;height: 0;width: 0;*/
+                 }
+                 .slider {
+                   background-color: white;
+                   cursor: pointer;
+                 }
+                 .reset-button {
+                   display: none;
+                   width: 50px;
+                   height: 50px;
+                   background-color: #d81c5c;
+                   color: white;
+                   cursor: pointer;
+                   border-radius: 5px;
+                 }
+                 footer {
+                   display: flex;
+                   justify-content: space-between;
+                   align-items: center;
+                   background-color: darkslategray;
+                   color: silver;
+                   padding: 8px;
+                   font-size: 0.75em;
+                 }
+                 .left-foot {
+                   text-align: left;
+                 }
+                 .right-foot {
+                   text-align: right;
+                 }
+            </style>
+        </head>
+        <body>
+            <header>
+              <h1>Interactive Web App for Path-Finding Algorithms</h1>
+            </header>
+            <!-- Main Plotting Body -->
+            <main>
+              <div id="plot"></div>
+              <script>
+                // show plot
+                async function showPlot(actionURL, formData = null) {
+                  const response = await fetch(actionURL, {method: formData ? "POST" : "GET", body: formData});
+                  const fig = await response.json();
+                  Plotly.newPlot('plot', fig.data, fig.layout);
+                }
+                // update plot with heightmap
+                document.getElementById("terrain-generator").addEventListener("submit", function(event) {
+                  event.preventDefault();
+                  const data = new FormData(this);
+                  showPlot("/generate-terrain", data); // references quoted main.py function
+                });
+                // update plot with points and paths
+                document.getElementById("start-end-setter").addEventListener("submit", function(event) {
+                  event.preventDefault();
+                  const data = new FormData(this);
+                  showPlot("/plot-paths", data); // references quoted main.py function
+                });
+                // reset plot
+                //document.getElementById("reset-button").addEventListener("click", function(event) {
+                  //showPlot("/reset-plot", data); // references quoted main.py function
+                //});
+                // switch plot type
+                //document.getElementById("plotDimensionToggle").addEventListener("change", function() {
+                  //if (this.checked) {
+                  //  ...
+                  //}
+                  //else {
+                  //  ...
+                  //}
+                //});
+                
+                //showPlot();
+              </script>
+            </main>
+            
+            <!-- User Input -->
+            <form id="terrain-generator" method="post" action="/set-dims">
+              <label for="x_dim">X Dimension</label>
+              <input type="text" id="x_dim" name="x_dim" value="100" min="0" max="1000" required />
+              <label for="y_dim">Y Dimension</label>
+              <input type="text" id="y_dim" name="y_dim" value="100" min="0" max="1000" required />
+              <button class="generate-button" type="submit">Generate Map</button> <!-- large square button to reveal next form -->
+            </form>
+            <div class="plot-options">
+              <form id="start-end-setter" method="post" action="/set-points">
+                <label>Start</label>
+                <div>
+                  <label for="start_x">X</label>
+                  <input type="text" id="start_x" name="start_x" min="0" max="1000" required />
+                  <label for="start_y">Y</label>
+                  <input type="text" id="start_y" name="start_y" min="0" max="1000" required />
+                </div>
+                <label>Endpoint</label>
+                <div>
+                  <label for="end_x">X</label>
+                  <input type="text" id="end_x" name="end_x" min="0" max="1000" required />
+                  <label for="end_y">Y</label>
+                  <input type="text" id="end_y" name="end_y" min="0" max="1000" required />
+                </div>
+                <button class="plot-button" type="submit">Plot Paths</button> <!-- large square plot button -->
+              </form>
+              <div class="switch-container">
+                <label class="switch">
+                  <input type="checkbox" id="plotDimensionToggle" />
+                  <span class="slider">
+                    <div class="3D-icon">⛰️</div>
+                    <div class="2D-icon">🗺️ </div> 
+                  </span>
+                </label>
+              </div>
+            </div>
+            <button class="reset-button">Reset</button> <!-- big red button -->
+            
+            <footer>
+              <div class="left-foot">Designed for COP3530 at the University of Florida 🐊</div>
+              <div class="right-foot">Made with ♡ by Jaden Despeines, Alexander Kolychkine, and Matteo Welford</div>
+            </footer>
+        </body>
+        </html>
