@@ -6,13 +6,13 @@ from plotly.utils import PlotlyJSONEncoder
 #import everything from the other files (doing this to make the code cleaner & more readable)
 from map_creation import *
 from path_finding import *
-#from plotter import *
+from plotter import *
 
 # uvicorn main:app --reload
-
 app = FastAPI()
+heightmap_fig = go.Figure()
 
-# temporary - move to separate file
+# temporary notes
 #create_maps() # input args x,y
 #nodemap[x][y].height
 #nodemap[x][y].isPath
@@ -30,8 +30,27 @@ async def plot():
 
 @app.post("/terrain-generator")
 async def terrain_generator(xlim: int = Form(100), ylim: int = Form(100)):
+    # create and plot just heightmap
     create_maps(xlim,ylim)
+    global heightmap_fig
+    heightmap_fig = plotTerrain(as_3d=True)
+    heightmap_fig = json.dumps(heightmap_fig, cls=PlotlyJSONEncoder)
+    return JSONResponse(content=heightmap_fig)
+    
 
 @app.post("/start-end-setter")
 async def start_end_setter():
-    pass
+    # plot heightmap and points/paths
+    marked_fig = heightmap_fig
+    ##marked_fig.add_trace()##
+    #marked_fig = json.dumps(marked_fig, cls=PlotlyJSONEncoder)
+    #return JSONResponse(content=marked_fig)
+
+
+@app.post("/reset-button")
+async def reset_button():
+    # remove points/paths, reset to heightmap
+    global heightmap_fig
+    heightmap_fig = plotTerrain(as_3d=True)
+    heightmap_fig = json.dumps(heightmap_fig, cls=PlotlyJSONEncoder)
+    return JSONResponse(content=heightmap_fig)

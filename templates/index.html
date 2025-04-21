@@ -4,7 +4,7 @@
             <meta charset="UTF-16">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-            <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+            <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
             <title>Path-Finding Web App</title>  
             <style>
                  body {
@@ -45,7 +45,7 @@
                    
                  }
                  .switch-container {
-                   /*display: none;*/
+                   display: none; /* */
                  }
                  .switch {
                    /*width: 50;height: 50;position: relative;*/
@@ -112,9 +112,9 @@
                   showPlot("/plot-paths", data); // references quoted main.py function
                 });
                 // reset plot
-                //document.getElementById("reset-button").addEventListener("click", function(event) {
-                  //showPlot("/reset-plot", data); // references quoted main.py function
-                //});
+                document.getElementById("reset-button").addEventListener("click", function(event) {
+                  showPlot("/reset-plot"); // references quoted main.py function
+                });
                 // switch plot type
                 //document.getElementById("plotDimensionToggle").addEventListener("change", function() {
                   //if (this.checked) {

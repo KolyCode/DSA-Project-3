@@ -21,7 +21,7 @@ def plotTerrain(as_3d=False):
     for n in a_star_path:
         path2_x, path2_y, path2_z = n.posx, n.posy, n.height
 
-    if as_3d = False:
+    if as_3d == False:
         # heatmap plot
         # requires x, y arrays of paths
         fig = go.Figure()
