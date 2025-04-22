@@ -200,17 +200,33 @@ def create_node_map_from_heightmap(heightmap):
 def get_neighbors(u, graph):
     if graph is None:
         return None
+    result = []
+    if u.posy+1 < len(graph):
+        up = graph[u.posx][u.posy + 1]
+        result.append((up, u.weight_up))
+        if u.posx+1 < len(graph):
+            up_right = graph[u.posx + 1][u.posy + 1]
+            result.append((up_right, u.weight_upright))
+        if u.posx > 0:
+            up_left = graph[u.posx - 1][u.posy + 1]
+            result.append((up_left, u.weight_upleft))
+    if u.posx+1 < len(graph):
+        right = graph[u.posx + 1][u.posy]
+        result.append((right, u.weight_right))
+        if u.posy > 0:
+            down_right = graph[u.posx + 1][u.posy - 1]
+            result.append((down_right, u.weight_downright))
+    if u.posy > 0:
+        down = graph[u.posx][u.posy - 1]
+        result.append((down, u.weight_down))
+        if u.posx > 0:
+            down_left = graph[u.posx - 1][u.posy - 1]
+            result.append((down_left, u.weight_downleft))
+    if u.posx > 0:
+        left = graph[u.posx - 1][u.posy]
+        result.append((left, u.weight_left))
 
-    up = graph[u.posx][u.posy + 1]
-    up_right = graph[u.posx + 1][u.posy + 1]
-    right = graph[u.posx + 1][u.posy]
-    down = graph[u.posx][u.posy - 1]
-    down_left = graph[u.posx - 1][u.posy - 1]
-    left = graph[u.posx - 1][u.posy]
-    up_left = graph[u.posx - 1][u.posy + 1]
-    down_right = graph[u.posx + 1][u.posy - 1]
-
-    return [(up, u.weight_up), (up_right, u.weight_upright), (right, u.weight_right), (down, u.weight_down), (down_left, u.weight_downleft), (left, u.weight_left), (up_left, u.weight_upleft), (down_right, u.weight_downright)]
+    return result
 
 
 
