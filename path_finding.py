@@ -69,7 +69,7 @@ def a_star(start, end, graph):
 
         for n, d in get_neighbors(current, graph):
             tentative_g_score = g_score[current] + d
-            if tentative_g_score < g_score[n]:
+            if tentative_g_score < g_score.get(n, float('inf')): # if n is not in g_score, use infinity
                 prev[n] = current
                 g_score[n] = tentative_g_score
                 f_score[n] = tentative_g_score + heuristic(n, end)
