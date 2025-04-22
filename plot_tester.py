@@ -26,11 +26,11 @@ print("""\nDisplaying Terrain and Paths in Plotly...
       \n\tHold `Left-Click` to rotate
       \n\tUse `Scroll Wheel` to zoom
       \n\tHold `Right-Click` to pan""")
-#dists, prev = dijkstra(nodemap, start_in)
-#dijk_path = get_path(prev, end_in)
-dijk_path = [nodemap[0][0], nodemap[1][1], nodemap[2][1], nodemap[2][2]]  # temp : test case
-#a_star_path = a_star(start_in, end_in, nodemap)
-a_star_path = [nodemap[0][0], nodemap[1][1], nodemap[2][2], nodemap[2][3], nodemap[3][3], nodemap[4][4]]  # temp : test case
+dists, prev = dijkstra(nodemap, start_in, end_in)
+dijk_path = get_path(prev, end_in)
+#dijk_path = [nodemap[0][0], nodemap[1][1], nodemap[2][1], nodemap[2][2]]  # temp : test case
+a_star_path = a_star(start_in, end_in, nodemap)
+#a_star_path = [nodemap[0][0], nodemap[1][1], nodemap[2][2], nodemap[2][3], nodemap[3][3], nodemap[4][4]]  # temp : test case
 
 
 full_plot = addPathsToMap3d(terrain_plot, dijk_path, a_star_path)
