@@ -67,7 +67,7 @@ def a_star(start, end, graph):
         if current == end:
             return get_path(prev, current)
 
-        for d, n in get_neighbors(current, graph):
+        for n, d in get_neighbors(current, graph):
             tentative_g_score = g_score[current] + d
             if tentative_g_score < g_score[n]:
                 prev[n] = current
