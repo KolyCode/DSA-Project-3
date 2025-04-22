@@ -26,7 +26,7 @@ def dijkstra(graph, start):  # graph is a nodemap list
             continue
         visited.add(u)
 
-        for v, d in get_neighbors(u):
+        for v, d in get_neighbors(u, graph):
             alt = dist + d
             if alt < dists[v]:
                 dists[v] = alt
@@ -66,7 +66,7 @@ def a_star(start, end, graph):
         if current == end:
             return get_path(prev, current)
 
-        for d, n in get_neighbors(current):
+        for d, n in get_neighbors(current, graph):
             tentative_g_score = g_score[current] + d
             if tentative_g_score < g_score[n]:
                 prev[n] = current
