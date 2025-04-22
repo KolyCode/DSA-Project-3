@@ -2,32 +2,40 @@ import heapq, math
 
 from map_creation import *
 
-def dijkstra(graph, start): #graph is a nodemap list
+counter = count()  # global tie breaker
+
+def dijkstra(graph, start):  # graph is a nodemap list
     dists = {}
     prev = {}
     nodes = []
-    for r in graph:
-        for v in r:
+
+    for row in graph:
+        for v in row:
             dists[v] = float('inf')
             prev[v] = None
     dists[start] = 0
+
     for v in dists:
-        heapq.heappush(nodes, (dists[v], v)) # add to nodes as a tuple (distance to node, node) so it's sorted by
-        # the distances
+        heapq.heappush(nodes, (dists[v], next(counter), v))
+
+    visited = set()  # optional: to prevent revisiting
 
     while nodes:
-        dist, u = heapq.heappop(nodes) #pop the distance into dist and node into u
-        neigh = get_neighbors(u)
-        for v, d in neigh:
-            if v in nodes:
-                alt = dist + d
-                if alt < dists[v]:
-                    dists[v] = alt
-                    prev[v] = u
-                    u.is_path = True
+        dist, _, u = heapq.heappop(nodes)
+        if u in visited:
+            continue
+        visited.add(u)
 
-    return dists, prev # use get_path with this to find the best overall path to wherever
+        for v, d in get_neighbors(u):
+            alt = dist + d
+            if alt < dists[v]:
+                dists[v] = alt
+                prev[v] = u
+                heapq.heappush(nodes, (dists[v], next(counter), v))
+                u.is_path = True  # optional; only if you're tracking the path visually
 
+    return dists, prev
+    
 def get_path(prev, cur):
     path = [cur]
     while cur in prev:
@@ -42,7 +50,7 @@ def heuristic(start, end):
 
 def a_star(start, end, graph):
     open_set = []
-    heapq.heappush(open_set, (0, start))
+    heapq.heappush(open_set, (0, next(counter), start))
     prev = {}
 
     #g_score[n] is the currently known least cost to n
@@ -53,7 +61,7 @@ def a_star(start, end, graph):
     f_score = {start: heuristic(start, end)}
 
     while open_set:
-        _, current = heapq.heappop(open_set) #don't need the first part of this, its just for sorting
+        _, _, current = heapq.heappop(open_set) #don't need the first part of this, its just for sorting
 
         if current == end:
             return get_path(prev, current)
@@ -65,7 +73,7 @@ def a_star(start, end, graph):
                 g_score[n] = tentative_g_score
                 f_score[n] = tentative_g_score + heuristic(n, end)
                 if n not in open_set:
-                    heapq.heappush(open_set, (f_score[n], n))
+                    heapq.heappush(open_set, (f_score[n], next(counter), n))
 
     # open_set is empty but the goal wasn't reached, i.e. no path
     return None
