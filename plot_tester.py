@@ -7,7 +7,7 @@ print("Plotter for Path-Finding Algorithms (Dijkstra & A*)")
 dim_in = input("Enter the x and y dimensions of the terrain to be generated as integers separated by a space: ").split()
 
 # generate initial 3D heightmap
-print("\nGenerating terrain with Perlin Noise...")
+print(f"\nGenerating terrain ({int(dim_in[0])*int(dim_in[1])} points) with Perlin Noise...")
 heightmap = create_height_map(int(dim_in[0]), int(dim_in[1]))
 nodemap = create_node_map_from_heightmap(heightmap)
 terrain_plot = plotMap3d(heightmap)
@@ -44,7 +44,7 @@ dijk_path_cost = path_cost(dijk_path)
 
 a_star_path = a_star(start_node, end_node, nodemap)
 a_star_path_cost = path_cost(a_star_path)
-#print(f"A* Path\n\tEdge Count :  {len(a_star_path)}\n\tCost       :   {a_star_path_cost}")
+#print(f"A* Path\n\tEdge Count :  {len(a_star_path)}\n\tCost       :  {a_star_path_cost}")
 
 # add paths to surface
 full_plot = addPathsToMap3d(terrain_plot, dijk_path, a_star_path)
