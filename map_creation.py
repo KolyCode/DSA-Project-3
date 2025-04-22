@@ -197,18 +197,18 @@ def create_node_map_from_heightmap(heightmap):
     return nodemap
 
 #returns the neighbors of the given node
-def get_neighbors(u):
-    if nodemap is None:
+def get_neighbors(u, graph):
+    if graph is None:
         return None
 
-    up = nodemap[u.posx][u.posy + 1]
-    up_right = nodemap[u.posx + 1][u.posy + 1]
-    right = nodemap[u.posx + 1][u.posy]
-    down = nodemap[u.posx][u.posy - 1]
-    down_left = nodemap[u.posx - 1][u.posy - 1]
-    left = nodemap[u.posx - 1][u.posy]
-    up_left = nodemap[u.posx - 1][u.posy + 1]
-    down_right = nodemap[u.posx + 1][u.posy - 1]
+    up = graph[u.posx][u.posy + 1]
+    up_right = graph[u.posx + 1][u.posy + 1]
+    right = graph[u.posx + 1][u.posy]
+    down = graph[u.posx][u.posy - 1]
+    down_left = graph[u.posx - 1][u.posy - 1]
+    left = graph[u.posx - 1][u.posy]
+    up_left = graph[u.posx - 1][u.posy + 1]
+    down_right = graph[u.posx + 1][u.posy - 1]
 
     return [(up, u.weight_up), (up_right, u.weight_upright), (right, u.weight_right), (down, u.weight_down), (down_left, u.weight_downleft), (left, u.weight_left), (up_left, u.weight_upleft), (down_right, u.weight_downright)]
 
