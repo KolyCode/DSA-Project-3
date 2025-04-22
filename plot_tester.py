@@ -26,12 +26,25 @@ end_node = nodemap[int(end_in[0])][int(end_in[1])]
 print("""\nDisplaying Terrain and Paths in Plotly... 
       \n\tHold `Left-Click` to rotate
       \n\tUse `Scroll Wheel` to zoom
-      \n\tHold `Right-Click` to pan""")
+      \n\tHold `Right-Click` to pan\n""")
+
+def path_cost(path):
+      cost = 0
+      for i in range(len(path)-1):
+           lateral_dist = (abs(path[i].posx - path[i+1].posx)**2 + abs(path[i].posy - path[i+1].posy)**2)**0.5
+           vert_dist = abs(path[i].height - path[i+1].height)
+           direct_dist = (lateral_dist**2 + vert_dist**2)**0.5
+           cost += direct_dist
+      return cost
+
 dists, prev = dijkstra(nodemap, start_node)
-dijk_path = get_path(prev, end_node)
-#dijk_path = [nodemap[0][0], nodemap[1][1], nodemap[2][1], nodemap[2][2]]  # temp : test case
+dijk_path = get_path(prev, end_node)[1:]
+dijk_path_cost = path_cost(dijk_path)
+#print(f"Dijkstra Path\n\tEdge Count :  {len(dijk_path)}\n\tCost       :   {dijk_path_cost}")
+
 a_star_path = a_star(start_node, end_node, nodemap)
-#a_star_path = [nodemap[0][0], nodemap[1][1], nodemap[2][2], nodemap[2][3], nodemap[3][3], nodemap[4][4]]  # temp : test case
+a_star_path_cost = path_cost(a_star_path)
+#print(f"A* Path\n\tEdge Count :  {len(a_star_path)}\n\tCost       :   {a_star_path_cost}")
 
 # add paths to surface
 full_plot = addPathsToMap3d(terrain_plot, dijk_path, a_star_path)

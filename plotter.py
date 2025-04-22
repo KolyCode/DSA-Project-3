@@ -56,13 +56,13 @@ def addPathsToMap3d(fig, dijk_path, a_star_path):
         for n in range(len(dijk_path)): 
             path1_x.append(dijk_path[n].posx)
             path1_y.append(dijk_path[n].posy)
-            path1_z.append(dijk_path[n].height+5)
+            path1_z.append(dijk_path[n].height*1.15)
     path2_x, path2_y, path2_z = [], [], []
     if a_star_path != None:
         for n in range(len(a_star_path)):
             path2_x.append(a_star_path[n].posx)
             path2_y.append(a_star_path[n].posy)
-            path2_z.append(a_star_path[n].height+5)
+            path2_z.append(a_star_path[n].height*1.15)
 
     # plot Dijkstra path
     fig.add_trace(
@@ -71,7 +71,7 @@ def addPathsToMap3d(fig, dijk_path, a_star_path):
             y = path1_y,
             z = path1_z,
             mode = "lines+markers",
-            line = dict(color="rgba(143, 0, 255, 0.6)", width=8),
+            line = dict(color="rgba(143, 0, 255, 0.6)", width=10),
             marker = dict(color="rgba(143, 0, 255, 0.6)", size=12),
             name = "Dijkstra"
         )
@@ -83,7 +83,7 @@ def addPathsToMap3d(fig, dijk_path, a_star_path):
             y = path2_y,
             z = path2_z,
             mode = "lines+markers",
-            line = dict(color="rgba(153, 187, 38, 0.6)", width=8),
+            line = dict(color="rgba(153, 187, 38, 0.6)", width=10),
             marker = dict(color="rgba(153, 187, 38, 0.6)", size=12),
             name = "A Star"
         )
