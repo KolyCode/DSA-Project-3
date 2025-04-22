@@ -3,7 +3,64 @@ from map_creation import *  # provides heightmap
 from path_finding import *
 import plotly.graph_objects as go
 
-def plotTerrain(as_3d=False):
+
+def plotMap3d(heightmap):
+    # 3d surface
+    # requires path x, path y, path z (having values of height from heightmap)
+    fig = go.Figure()
+    fig.add_trace(
+        go.Surface(
+            z = heightmap,
+            colorscale = "Blackbody"
+        )
+    )
+    fig.update_layout(
+        title = "Surface Plot of Generated Terrain and Paths",
+        scene = dict(xaxis_title="X", yaxis_title="Y", zaxis_title="Height", zaxis=dict(range=[0,255]))
+    )
+    return fig
+
+def addPathsToMap3d(fig, dijk_path, a_star_path):
+    path1_x, path1_y, path1_z = [], [], []
+    if dijk_path != None:
+        for n in range(len(dijk_path)): 
+            path1_x.append(dijk_path[n].posx)
+            path1_y.append(dijk_path[n].posy)
+            path1_z.append(dijk_path[n].height)
+            #path1_x[n], path1_y[n], path1_z[n] = dijk_path[n].posx, dijk_path[n].posy, dijk_path[n].height
+    path2_x, path2_y, path2_z = [], [], []
+    if a_star_path != None:
+        for n in range(len(a_star_path)):
+            path2_x.append(a_star_path[n].posx)
+            path2_y.append(a_star_path[n].posy)
+            path2_z.append(a_star_path[n].height)
+            #path2_x[n], path2_y[n], path2_z[n] = a_star_path[n].posx, a_star_path[n].posy, a_star_path[n].height
+    fig.add_trace(
+        go.Scatter3d(
+            x = path1_x,
+            y = path1_y,
+            z = path1_z,
+            mode = "lines+markers",
+            line = dict(color="rgba(143, 0, 255, 0.6)", width=4),
+            marker = dict(color="rgba(143, 0, 255, 0.6)", size=8),
+            name = "Dijkstra"
+        )
+    )
+    fig.add_trace(
+        go.Scatter3d(
+            x = path2_x,
+            y = path2_y,
+            z = path2_z,
+            mode = "lines+markers",
+            line = dict(color="rgba(153, 187, 38, 0.6)", width=4),
+            marker = dict(color="rgba(153, 187, 38, 0.6)", size=8),
+            name = "A Star"
+        )
+    )
+    return fig
+
+
+def plotTerrainAndPaths(as_3d=False):
     # on push of Plot Paths button
 
     # this function follows a call to create_maps(x,y)

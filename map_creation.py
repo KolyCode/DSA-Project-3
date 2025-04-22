@@ -180,6 +180,22 @@ def create_node_map():
     #it also edits the nodemap, so u don't have to take the return here if you don't want to
     return nodemap
 
+# performs the function of `create_node_map()` without global var tomfoolery
+def create_node_map_from_heightmap(heightmap):
+    nodemap = [[None for _ in range(len(heightmap[0]))] for _ in range(len(heightmap))]
+    #this for loop initializes the node array
+    for x in range(0, len(heightmap)):
+        for y in range(0, len(heightmap[x])):
+            nodemap[x][y] = Node(x, y, heightmap[x][y])
+
+    #this for loop calls the neighbor calculations for each node
+    for x in range(len(nodemap)):
+        for y in range(len(nodemap[x])):
+            nodemap[x][y].find_distance_to_neighbors()
+
+    #it also edits the nodemap, so u don't have to take the return here if you don't want to
+    return nodemap
+
 #returns the neighbors of the given node
 def get_neighbors(u):
     if nodemap is None:
