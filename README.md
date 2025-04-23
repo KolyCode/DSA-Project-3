@@ -12,6 +12,9 @@ For each algorithm, the randomly generated terrain of the heightmap is a graph o
 
 ### DEVELOPER INSTRUCTIONS
 
+**Project Implementation**
+* disregard templates/ and main.py in assessment of code count
+
 plot_tester.py implements the plotting functionality for this project with console input. 
 
 Run file `plot_tester.py`
@@ -30,7 +33,9 @@ The program generates a Plotly 3D surface that can be viewed and interacted with
 
 ---
 
-**Ignore instructions below, web app is not yet in a working state:**
+**Work in progress web app implementation**
+
+**Ignore instructions below, alternative web app in main.py is not yet in a working state:** 
 
 > To test the web app within your browser, open **TERMINAL** and execute:
 > ```
